@@ -40,7 +40,7 @@ func ConvertStickers(stickersReader []types.StickerReader) ([]types.StickerBytes
 					rectImage = image.Rect(0, delta, newW, newH-delta)
 				}
 				dst := image.NewRGBA(rectImage)
-				draw.ApproxBiLinear.Scale(dst, image.Rect(0, 0, newW, newH), src, src.Bounds(), draw.Over, nil)
+				draw.CatmullRom.Scale(dst, image.Rect(0, 0, newW, newH), src, src.Bounds(), draw.Over, nil)
 				var output bytes.Buffer
 				err = png.Encode(&output, dst)
 				convertedStickers = append(convertedStickers, types.StickerBytes{
