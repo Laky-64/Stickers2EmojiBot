@@ -4,10 +4,9 @@ import (
 	"Stickers2Emoji/consts"
 	"Stickers2Emoji/types"
 	"bytes"
+	"github.com/chai2010/webp"
 	"golang.org/x/image/draw"
-	"golang.org/x/image/webp"
 	"image"
-	"image/png"
 	"sync"
 )
 
@@ -42,7 +41,10 @@ func ConvertStickers(stickersReader []types.StickerReader) ([]types.StickerBytes
 				dst := image.NewRGBA(rectImage)
 				draw.CatmullRom.Scale(dst, image.Rect(0, 0, newW, newH), src, src.Bounds(), draw.Over, nil)
 				var output bytes.Buffer
-				err = png.Encode(&output, dst)
+				err = webp.Encode(&output, dst, &webp.Options{
+					Lossless: true,
+					Exact:    true,
+				})
 				convertedStickers = append(convertedStickers, types.StickerBytes{
 					Emoji: sticker.Emoji,
 					Data:  output.Bytes(),
