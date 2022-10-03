@@ -44,7 +44,7 @@ func ListenerBeta(client *gobotapi.Client, update types.Message) {
 		var zipFile bytes.Buffer
 		zipWriter := zip.NewWriter(&zipFile)
 		for _, sticker := range convertedStickers {
-			create, _ := zipWriter.Create(sticker.Emoji + ".png")
+			create, _ := zipWriter.Create(sticker.Emoji + ".webp")
 			_, _ = create.Write(sticker.Data)
 		}
 		_ = zipWriter.Close()
