@@ -4,10 +4,11 @@ import (
 	"Stickers2Emoji/consts"
 	"Stickers2Emoji/types"
 	"bytes"
-	"github.com/chai2010/webp"
-	"golang.org/x/image/draw"
 	"image"
 	"sync"
+
+	"github.com/chai2010/webp"
+	"golang.org/x/image/draw"
 )
 
 func ConvertStickers(stickersReader []types.StickerReader) ([]types.StickerBytes, error) {
@@ -38,6 +39,9 @@ func ConvertStickers(stickersReader []types.StickerReader) ([]types.StickerBytes
 					delta := (newH - consts.EmojiSize) / 2
 					rectImage = image.Rect(0, delta, newW, newH-delta)
 				}
+
+				rectImage = FixStickerRatio(rectImage)
+
 				dst := image.NewRGBA(rectImage)
 				draw.CatmullRom.Scale(dst, image.Rect(0, 0, newW, newH), src, src.Bounds(), draw.Over, nil)
 				var output bytes.Buffer

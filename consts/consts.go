@@ -12,3 +12,10 @@ var (
 	EmojiSize           = 100
 	ConvertingProcesses = make(map[int64]bool)
 )
+
+const (
+	BoundCheckLeft = iota
+	BoundCheckRight
+	BoundCheckTop
+	BoundCheckBottom
+)
