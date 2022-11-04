@@ -10,12 +10,6 @@ var (
 	DefaultAntiFlood    = filters.AntiFlood(5, time.Second*5, time.Second*10)
 	AliasList           = []string{"/", ";", ".", "!"}
 	EmojiSize           = 100
+	SensibilityBorder   = 98 // 0-100
 	ConvertingProcesses = make(map[int64]bool)
-)
-
-const (
-	BoundCheckLeft = iota
-	BoundCheckRight
-	BoundCheckTop
-	BoundCheckBottom
 )

@@ -4,11 +4,11 @@ import (
 	"Stickers2Emoji/consts"
 	"Stickers2Emoji/types"
 	"bytes"
+	"golang.org/x/image/draw"
 	"image"
 	"sync"
 
 	"github.com/chai2010/webp"
-	"golang.org/x/image/draw"
 )
 
 func ConvertStickers(stickersReader []types.StickerReader) ([]types.StickerBytes, error) {
@@ -25,25 +25,10 @@ func ConvertStickers(stickersReader []types.StickerReader) ([]types.StickerBytes
 					failedError = err
 					return
 				}
-				var newW, newH int
-				ratio := float64(src.Bounds().Max.X) / float64(src.Bounds().Max.Y)
-				var rectImage image.Rectangle
-				if ratio > 1 {
-					newW = int(float64(consts.EmojiSize) * ratio)
-					newH = consts.EmojiSize
-					delta := (newW - consts.EmojiSize) / 2
-					rectImage = image.Rect(delta, 0, newW-delta, newH)
-				} else {
-					newW = consts.EmojiSize
-					newH = int(float64(consts.EmojiSize) / ratio)
-					delta := (newH - consts.EmojiSize) / 2
-					rectImage = image.Rect(0, delta, newW, newH-delta)
-				}
-
-				rectImage = FixStickerRatio(rectImage)
-
+				rectImage := image.Rect(0, 0, consts.EmojiSize, consts.EmojiSize)
+				src = FixStickerRatio(src)
 				dst := image.NewRGBA(rectImage)
-				draw.CatmullRom.Scale(dst, image.Rect(0, 0, newW, newH), src, src.Bounds(), draw.Over, nil)
+				draw.CatmullRom.Scale(dst, rectImage, src, src.Bounds(), draw.Over, nil)
 				var output bytes.Buffer
 				err = webp.Encode(&output, dst, &webp.Options{
 					Lossless: true,
